@@ -1,0 +1,12 @@
+name: vmware_tasks
+modulepath: ["modules", ".."]
+modules:
+  - puppetlabs/translate
+  - puppetlabs/inifile
+  - puppetlabs/stdlib
+
+puppetdb:
+  server_urls: 
+  - https://pe.paulreed.ca:8081
+  cacert: "certs/cacert.pem"
+  token: "tokens/token"

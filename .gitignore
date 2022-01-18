@@ -24,5 +24,8 @@
 .DS_Store
 .project
 .envrc
-/inventory.yaml
 /spec/fixtures/litmus_inventory.yaml
+/certs/*
+/tokens/*
+bolt-debug.log
+.rerun.json

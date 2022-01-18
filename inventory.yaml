@@ -1,0 +1,7 @@
+config: 
+  transport: pcp
+  pcp:
+    cacert: "certs/cacert.pem"
+    service-url: https://pe.paulreed.ca:8143
+    task-environment: production
+    token-file: "tokens/token"

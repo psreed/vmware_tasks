@@ -1,0 +1,18 @@
+{
+    "description": "Base64 Encode a string (as a Sensitive type input).",
+    "parameters": {
+        "input_string": {
+            "type": "String[1]",
+            "description": "Input String",
+            "sensitive": true
+        }
+    },
+    "implementations": [
+        {
+            "name": "base64.sh",
+            "requirements": [
+                "shell"
+            ]
+        }
+    ]
+}

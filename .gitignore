@@ -29,3 +29,4 @@
 /tokens/*
 bolt-debug.log
 .rerun.json
+params/*

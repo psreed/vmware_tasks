@@ -19,8 +19,14 @@ plan vmware_tasks::auth(
   })
 
   if ($b64_encoded[0].status == 'success') {
+
     # Use curl to grab the API Key
-    $curl_result = run_command("${curl} -s -X POST -H \"Authorization: Basic ${b64_encoded[0].value['_output'].strip()}\" https://${host}/api/session", localhost,{'_catch_errors'=>true}) #lint:ignore:140chars
+    $curl_result = run_command("${curl} -s -X POST -H \"Authorization: Basic ${b64_encoded[0].value['_output'].strip()}\" https://${host}/api/session",
+      localhost,
+      'Retrieving API Key from vSphere Host',
+      {'_catch_errors'=>true}
+    )
+
     if ($curl_result[0].status == 'success') {
       # Validate the key
       $api_key=$curl_result[0].value['stdout'].strip().regsubst("^\"|\"$",'','G')
@@ -30,9 +36,9 @@ plan vmware_tasks::auth(
       if ($api_key != '') {
         #write the key out to the specified file for further use
         #$result = write_file($api_key, $vsphere_api_keyfile, localhost)
-        $result = run_command("echo -n ${api_key} > ${vsphere_api_keyfile}", localhost)
+        $result = run_command("echo -n ${api_key} > ${vsphere_api_keyfile}", localhost, "Writing API key to ${vsphere_api_keyfile}")
         if ($result[0].status == 'success') {
-          out::message("API Key written to file ${vsphere_api_keyfile}")
+          out::message("API Key successfully retrieved and written to file: ${vsphere_api_keyfile}")
         } else {
           fail_plan("Failed to write API key to file ${vsphere_api_keyfile}")
         }

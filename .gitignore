@@ -30,3 +30,4 @@
 bolt-debug.log
 .rerun.json
 params/*
+inventory.yaml

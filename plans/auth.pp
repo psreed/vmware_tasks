@@ -35,7 +35,7 @@ plan vmware_tasks::auth(
       }
       if ($api_key != '') {
         #write the key out to the specified file for further use
-        #$result = write_file($api_key, $vsphere_api_keyfile, localhost)
+        #Note: file::write and write_file functions don't seem to support user shorthand starting with tilde (~), so we used run_command
         $result = run_command("echo -n ${api_key} > ${vsphere_api_keyfile}", localhost, "Writing API key to ${vsphere_api_keyfile}")
         if ($result[0].status == 'success') {
           out::message("API Key successfully retrieved and written to file: ${vsphere_api_keyfile}")

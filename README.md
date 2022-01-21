@@ -2,6 +2,11 @@
 
 ## Plans:
 
-### vmware_tasks::auth
+### vmware_tasks
 
-This plan is designed to authenticate with a vsphere implementation with username/password and obtain an API Key for use with other plans/tasks within this module.
+just run `bolt plan run vmware_tasks` for a menu of options. 
+
+1. run the setup option to create a local config file 
+2. run the authentication option to update the local config with a usable session key
+3. run the other plans that will show up in the list after an API key is available
+4. if plans fail, try re-authenticating (likely your session has expired)

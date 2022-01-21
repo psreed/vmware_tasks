@@ -1,5 +1,0 @@
-Started on localhost...
-Finished on localhost:
-  83ad4c235c42f7d870053ac100c2279b
-Successful on 1 target: localhost
-Ran on 1 target in 0.4 sec

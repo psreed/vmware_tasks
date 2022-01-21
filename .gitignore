@@ -31,3 +31,4 @@ bolt-debug.log
 .rerun.json
 params/*
 inventory.yaml
+.vmware_tasks.config.json

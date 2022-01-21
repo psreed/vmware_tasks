@@ -1,15 +1,19 @@
 plan vmware_tasks::auth(
-  String $vsphere_host = '',
-  String $vsphere_api_keyfile = '~/.vsphere_api_key',
-  Boolean $allow_insecure_ssl = false
+#  String $vsphere_host = '',
+#  String $vsphere_api_keyfile = '~/.vsphere_api_key',
+#  Boolean $allow_insecure_ssl = false
+  Hash $config,
+  String $config_file
 ){
 
   #Setup curl command as a variable for secure/insecure SSL
-  if ($allow_insecure_ssl) { $curl='/usr/bin/curl -k' } else { $curl='/usr/bin/curl' }
+  #if ($config['insecure_ssl']=~'(?i)true') { $curl='/usr/bin/curl -k' } else { $curl='/usr/bin/curl' }
+
+  log::debug("Config in plan 'auth': ${config}")
 
   #Prompt for vsphere user secure password
-  $host = prompt('vSphere Host', 'default' => $vsphere_host)
-  $vsphere_user = prompt('vSphere Username', 'default' => 'administrator@vsphere.local')
+  $host = prompt('vSphere Host', 'default' => $config['vsphere_host'])
+  $vsphere_user = prompt('vSphere Username', 'default' => $config['vsphere_user'])
   $vsphere_password = prompt('vSphere Password', 'sensitive' => true)
 
   # Base64 encode the user/password combination for Basic Auth
@@ -21,7 +25,7 @@ plan vmware_tasks::auth(
   if ($b64_encoded[0].status == 'success') {
 
     # Use curl to grab the API Key
-    $curl_result = run_command("${curl} -s -X POST -H \"Authorization: Basic ${b64_encoded[0].value['_output'].strip()}\" https://${host}/api/session",
+    $curl_result = run_command("${config['curl']} -s -X POST -H \"Authorization: Basic ${b64_encoded[0].value['_output'].strip()}\" https://${host}/api/session",
       localhost,
       'Retrieving API Key from vSphere Host',
       {'_catch_errors'=>true}
@@ -35,13 +39,10 @@ plan vmware_tasks::auth(
       }
       if ($api_key != '') {
         #write the key out to the specified file for further use
-        #Note: file::write and write_file functions don't seem to support user shorthand starting with tilde (~), so we used run_command
-        $result = run_command("echo -n ${api_key} > ${vsphere_api_keyfile}", localhost, "Writing API key to ${vsphere_api_keyfile}")
-        if ($result[0].status == 'success') {
-          out::message("API Key successfully retrieved and written to file: ${vsphere_api_keyfile}")
-        } else {
-          fail_plan("Failed to write API key to file ${vsphere_api_keyfile}")
-        }
+        run_plan('vmware_tasks::config_write_to_disk', {
+          'config'=>merge($config,{'vsphere_api_key'=>$api_key}),
+          'config_file'=>$config_file
+        })
       } else {
         fail_plan('Could not parse output from vsphere host.')
       }

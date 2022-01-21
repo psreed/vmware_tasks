@@ -1,0 +1,31 @@
+{
+    "description": "Enable/Disable SSH Access on a VMware VCSA Appliance.",
+    "parameters": {
+        "vcsa": {
+            "type": "String[1]",
+            "description": "VCSA Hostname"
+        },
+        "enable": {
+            "type": "Boolean",
+            "description": "true = Enable VCSA SSH Access, false = Disable VCSA SSH Access. Default is most secure option: false.",
+            "default": false
+        },
+        "api_key": {
+            "type": "String[1]",
+            "description": "API Key to use for session"
+        },
+        "use_insecure_https": {
+            "type": "Optional[Boolean]",
+            "description": "Allow the use of insecure HTTPS (curl -k option). Default: false",
+            "default": false
+        }
+    },
+    "implementations": [
+        {
+            "name": "vcsa_ssh.sh",
+            "requirements": [
+                "shell"
+            ]
+        }
+    ]
+}

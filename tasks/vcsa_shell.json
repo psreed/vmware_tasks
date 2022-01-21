@@ -1,0 +1,37 @@
+{
+    "description": "Enable/Disable Shell on a VMware VCSA Appliance.",
+    "parameters": {
+        "vcsa": {
+            "type": "String[1]",
+            "description": "VCSA Hostname"
+        },
+        "enable": {
+            "type": "Boolean",
+            "description": "true = Enable VCSA Shell Access, false = Disable VCSA Shell Access. Default is most secure option: false.",
+            "default": false
+        },
+        "timeout": {
+            "type": "Integer",
+            "description": "Time (in seconds) that the shell will remain enabled. Only used when 'enable' is set to 'true'.",
+            "default": 300
+        },
+        "vcsa_api_key_file": {
+            "type": "Optional[String[1]]",
+            "description": "Location to store API key in file for use. NOTE: if '-t localhost', the outfile file is relative to the current Bolt project directory.",
+            "default": "tokens/vcsa_api_key_file"
+        },
+        "use_insecure_https": {
+            "type": "Optional[Boolean]",
+            "description": "Allow the use of insecure HTTPS (curl -k option). Default: false",
+            "default": false
+        }
+    },
+    "implementations": [
+        {
+            "name": "vcsa_shell.sh",
+            "requirements": [
+                "shell"
+            ]
+        }
+    ]
+}
